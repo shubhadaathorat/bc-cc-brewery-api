@@ -4,6 +4,7 @@ service: payment-reconsilation
 
 plugins:
  - serverless-offline
+ # - serverless-plugin-typescript
 
 provider:
  name: aws
@@ -31,5 +32,5 @@ functions:
    events:
      - http:
          method: ANY
-         path: /v1/login
+         path: /v1/
          cors: true

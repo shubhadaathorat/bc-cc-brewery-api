@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { loginModule } from './modules/login/users.module';
+//import { loginModule } from './modules/user/users.module';
+import { UsersModule } from './users/users.module';
+import { AssociationModule } from './association/association.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: [`.env`],
     }),
-    loginModule,
+    //loginModule,
     TypeOrmModule.forRootAsync({
       // initializing the TypeOrmModule async to wait the ConfigModule initialization so we can use the env variables
       imports: [ConfigModule], // we import the ConfigModule
@@ -33,8 +34,10 @@ import { loginModule } from './modules/login/users.module';
         };
       },
     }),
+    UsersModule,
+    AssociationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
