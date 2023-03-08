@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 //import { loginModule } from './modules/user/users.module';
 import { UsersModule } from './users/users.module';
 import { AssociationModule } from './association/association.module';
+import { CountriesModule } from './countries/countries.module';
+import { ProvincesModule } from './provinces/provinces.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { AssociationModule } from './association/association.module';
     }),
     UsersModule,
     AssociationModule,
+    CountriesModule,
+    ProvincesModule,
   ],
   controllers: [],
   providers: [],

@@ -58,9 +58,9 @@ export class User {
     @Column({nullable: false})
     is_active: boolean
 
-    // @OneToOne(() => Association)
-    // @JoinColumn()
-    // association_id: Association 
+    @OneToOne(() => Association)
+    @JoinColumn()
+    association: Association 
     
     @Column()
     created_by: number

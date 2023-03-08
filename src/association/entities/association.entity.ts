@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Province } from 'src/provinces/entities/province.entity';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class Association {
@@ -22,4 +23,8 @@ export class Association {
     
     @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
     updated_at: Date;
+
+    @OneToOne(() => Province)
+    @JoinColumn()
+    province: Province 
 }
