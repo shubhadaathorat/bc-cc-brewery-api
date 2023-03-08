@@ -1,5 +1,6 @@
+import { Brewery } from 'src/breweries/entities/brewery.entity';
 import { Province } from 'src/provinces/entities/province.entity';
-import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Association {
@@ -10,7 +11,8 @@ export class Association {
         type: "varchar",
         length: 255
     })
-	association_name: string;
+    @OneToMany(() => Brewery, (brewery) => brewery.id)
+    association_name: Brewery
 
     @Column()
     created_by: number

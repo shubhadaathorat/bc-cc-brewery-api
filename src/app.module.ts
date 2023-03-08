@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AssociationModule } from './association/association.module';
 import { CountriesModule } from './countries/countries.module';
 import { ProvincesModule } from './provinces/provinces.module';
+import { BreweryTypeModule } from './brewery-type/brewery-type.module';
+import { BreweriesModule } from './breweries/breweries.module';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { ProvincesModule } from './provinces/provinces.module';
     AssociationModule,
     CountriesModule,
     ProvincesModule,
+    BreweryTypeModule,
+    BreweriesModule,
   ],
   controllers: [],
   providers: [],
