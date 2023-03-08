@@ -1,10 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import {User} from '../../users/entities/user.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Association {
     @PrimaryGeneratedColumn()
-    id: number;
+    association_id: number;
 
     @Column({
         type: "varchar",
@@ -23,7 +22,4 @@ export class Association {
     
     @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
     updated_at: Date;
-
-    @OneToOne(() => User, user => user.id)
-    user_id: User;
 }

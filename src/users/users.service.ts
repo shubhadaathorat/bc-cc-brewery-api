@@ -9,9 +9,7 @@ import { loginDto } from './dto/login-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-    //@InjectRepository(Association) private readonly associationRepository: Repository<Association>,
-    //@InjectRepository(Country) private readonly countryRepository: Repository<Country>
+    @InjectRepository(User) private readonly userRepository: Repository<User>
   ){}
 
   async findOne(id: number) {

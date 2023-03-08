@@ -1,7 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 
-import { Association } from './association.entity';
-import { Country } from './countries.entity';
+import { Association } from '../../association/entities/association.entity';
 
 export enum Role {
     User = 'user',
@@ -59,9 +58,9 @@ export class User {
     @Column({nullable: false})
     is_active: boolean
 
-    @OneToOne(() => Association, { cascade: true })
-    @JoinColumn()
-    association_id: number 
+    // @OneToOne(() => Association)
+    // @JoinColumn()
+    // association_id: Association 
     
     @Column()
     created_by: number
