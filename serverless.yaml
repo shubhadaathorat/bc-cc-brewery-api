@@ -19,7 +19,7 @@ provider:
   POSTGRES_DATABASE: ${env:POSTGRES_DATABASE}
 
  iamManagedPolicies:
-    - arn:aws:iam::aws:policy/AWSLambdaFullAccess 
+    - arn:aws:iam::aws:policy/AWSLambda_FullAccess 
 
 custom:
   stage:
