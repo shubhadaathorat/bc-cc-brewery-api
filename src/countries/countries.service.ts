@@ -10,6 +10,6 @@ export class CountriesService {
   ){}
 
   async findOne(id: number) {
-    return this.countryRepository.findOneBy({country_id: id});
+    return this.countryRepository.findOneBy({id: id});
   }
 }

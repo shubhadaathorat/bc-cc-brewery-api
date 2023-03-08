@@ -5,6 +5,9 @@ import { AssociationService } from '../association/association.service';
 //import { Country } from './entities/countries.entity';
 import { User } from './entities/user.entity';
 import { loginDto } from './dto/login-user.dto';
+import { Association } from 'src/association/entities/association.entity';
+import { Province } from 'src/provinces/entities/province.entity';
+import { Country } from 'src/countries/entities/country.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,24 +26,35 @@ export class UsersService {
     return this.userRepository.findOneBy({ username });
   }
 
+  async fetchUserDetails(username: string): Promise<User> {
+    return await this.userRepository.createQueryBuilder('u')
+      .select('u.id', 'userId')
+      .addSelect('u.username', 'userName')
+      .addSelect('u.email', 'userEmail')
+      .addSelect('a.association_name', 'associationName')
+      .addSelect('a.id', 'associationId')
+      .addSelect('p.province_name', 'proviencName')
+      .addSelect('c.country_name', 'countryName')
+      .leftJoin(Association, 'a', 'u.associationId = a.id')
+      .leftJoin(Province, 'p', 'a.provinceId = p.id')
+      .leftJoin(Country, 'c', 'p.countryId = c.id')
+      .where(`u.username = '${username}'`)
+      .getOne();
+  }
+
   async login(loginDto: loginDto){
-    const userData = await this.findByUsername(loginDto.username);
-    if (!userData || userData.user_password !== loginDto.password) {
+    const userLogin = await this.findByUsername(loginDto.username);
+    if (!userLogin || userLogin.user_password !== loginDto.password) {
       throw new UnauthorizedException();
     }
-    const userAssociation = userData.association;
-    const associationData = await this.AssociationService.findOne(userAssociation);
-    console.log(`associationData ${JSON.stringify(associationData)}`);
+    console.log(`userData ${JSON.stringify(userLogin)}`);
+    const userInfo = await this.fetchUserDetails(loginDto.username);
+    console.log(`associationData ${JSON.stringify(userInfo)}`);
 
     const payload = {
       status: 'success',
       code: '200',
       data: {
-        userInfo: {
-          id: userData.id,
-          username: userData.username,
-          emailId: userData.email,
-        }
       } 
     };
     return payload;

@@ -27,10 +27,9 @@ custom:
 
 functions:
  login:
-   handler: src/serverless.handler
-   memorySize: 2000
+   handler: dist/serverless.handler
    events:
-     - http:
-         method: ANY
-         path: /v1/
+     - httpApi:
+         method: any
+         path: /{proxy+}
          cors: true

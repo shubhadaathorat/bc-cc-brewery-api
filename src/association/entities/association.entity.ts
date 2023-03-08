@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'ty
 @Entity()
 export class Association {
     @PrimaryGeneratedColumn()
-    association_id: number;
+    id: number;
 
     @Column({
         type: "varchar",

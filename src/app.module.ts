@@ -19,6 +19,11 @@ import { ProvincesModule } from './provinces/provinces.module';
       imports: [ConfigModule], // we import the ConfigModule
       inject: [ConfigService], // and then from the ConfigModule, we inject the ConfigService
       useFactory: async (configService: ConfigService) => {
+        console.log(`test`);
+        console.log(configService.get('POSTGRES_PASSWORD').toString());
+        console.log(configService.get('POSTGRES_HOST'));
+        console.log(configService.get('POSTGRES_USERNAME'));
+        console.log(configService.get('POSTGRES_DATABASE'));
         const isProd = configService.get('STAGE') === 'prod';
 
         return {
@@ -32,6 +37,7 @@ import { ProvincesModule } from './provinces/provinces.module';
           database: configService.get('POSTGRES_DATABASE'),
           autoLoadEntities: true,
           synchronize: true,
+          logging: true,
           entities: ['dist/**/*.entity{.ts,.js}'],
         };
       },

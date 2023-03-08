@@ -10,6 +10,6 @@ export class AssociationService {
   ){}
 
   async findOne(id) {
-    return this.AssociationRepository.findOneBy({association_id: id});
+    return this.AssociationRepository.findOneBy({id: id});
   }
 }

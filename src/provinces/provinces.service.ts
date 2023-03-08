@@ -9,6 +9,6 @@ export class ProvincesService {
   ){}
   
   async findOne(id: number) {
-    return this.provinceRepository.findOneBy({province_id: id});
+    return this.provinceRepository.findOneBy({id: id});
   }
 }

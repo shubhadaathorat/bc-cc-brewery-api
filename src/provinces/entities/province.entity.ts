@@ -5,7 +5,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 @Entity()
 export class Province {
     @PrimaryGeneratedColumn()
-    province_id: number;
+    id: number;
 
     @Column({
         type: "varchar",
