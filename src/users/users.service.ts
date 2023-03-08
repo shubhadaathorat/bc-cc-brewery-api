@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-//import { Association } from './entities/association.entity';
+import { AssociationService } from '../association/association.service';
 //import { Country } from './entities/countries.entity';
 import { User } from './entities/user.entity';
 import { loginDto } from './dto/login-user.dto';
@@ -11,6 +11,9 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>
   ){}
+  
+  @Inject(AssociationService)
+  private readonly AssociationService: AssociationService;
 
   async findOne(id: number) {
     return this.userRepository.findOneBy({id: id});
@@ -25,6 +28,9 @@ export class UsersService {
     if (!userData || userData.user_password !== loginDto.password) {
       throw new UnauthorizedException();
     }
+    const userAssociation = userData.association;
+    const associationData = await this.AssociationService.findOne(userAssociation);
+    console.log(`associationData ${JSON.stringify(associationData)}`);
 
     const payload = {
       status: 'success',

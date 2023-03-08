@@ -9,7 +9,7 @@ export class AssociationService {
     @InjectRepository(Association) private readonly AssociationRepository: Repository<Association>
   ){}
 
-  async findOne(id: number) {
+  async findOne(id) {
     return this.AssociationRepository.findOneBy({association_id: id});
   }
 }

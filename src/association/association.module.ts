@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forFeature([Association])],
   controllers: [AssociationController],
-  providers: [AssociationService]
+  providers: [AssociationService],
+  exports: [AssociationService]
 })
 export class AssociationModule {}
