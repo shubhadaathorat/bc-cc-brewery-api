@@ -1,0 +1,35 @@
+useDotenv: true
+
+service: payment-reconsilation
+
+plugins:
+ - serverless-offline
+
+provider:
+ name: aws
+ runtime: nodejs16.x
+ region: us-west-2
+ timeout: 900
+ environment:
+  POSTGRES_HOST: ${env:POSTGRES_HOST}
+  POSTGRES_PORT: ${env:POSTGRES_PORT}
+  POSTGRES_USERNAME: ${env:POSTGRES_USERNAME}
+  POSTGRES_PASSWORD: ${env:POSTGRES_PASSWORD}
+  POSTGRES_DATABASE: ${env:POSTGRES_DATABASE}
+
+ iamManagedPolicies:
+    - arn:aws:iam::aws:policy/AWSLambdaFullAccess 
+
+custom:
+  stage:
+    - dev
+
+functions:
+ login:
+   handler: src/serverless.handler
+   memorySize: 2000
+   events:
+     - http:
+         method: ANY
+         path: /v1/login
+         cors: true
