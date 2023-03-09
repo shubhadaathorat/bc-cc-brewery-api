@@ -10,6 +10,7 @@ async function bootstrap(): Promise<Handler> {
   app.enableCors({
     origin: ['*'],
     methods: ['POST', 'PUT', 'DELETE', 'GET'],
+    allowedHeaders: ['content-type']
   });
   await app.init();
   const expressApp = app.getHttpAdapter().getInstance();
