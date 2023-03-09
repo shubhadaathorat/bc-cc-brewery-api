@@ -1,4 +1,4 @@
-import { Controller,  Post, Body } from '@nestjs/common';
+import { Controller,  Post, Body, Param, Get, Query } from '@nestjs/common';
 import { BreweriesService } from './breweries.service';
 import { CreateBreweryDto } from './dto/create-brewery.dto';
 
@@ -11,23 +11,18 @@ export class BreweriesController {
     return this.breweriesService.InsertBrewery(createBreweryDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.breweriesService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.breweriesService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateBreweryDto: UpdateBreweryDto) {
-  //   return this.breweriesService.update(+id, updateBreweryDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.breweriesService.remove(+id);
-  // }
+  @Get("mismatch")
+  mismatch(@Query('type') type: string,
+           @Query('provience') provience: string) {
+    if(type === "ministry"){
+      console.log(`provience ${provience}`)
+      return this.breweriesService.checkMinistryMismatch(provience);
+    } else if(type === 'association'){
+      return this.breweriesService.checkAssociationMistmatch(provience);
+    } else {
+      return {
+        "message": "wrong type of mismatch"
+      }
+    }
+  }
 }

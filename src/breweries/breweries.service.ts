@@ -3,14 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBreweryDto } from './dto/create-brewery.dto';
 import { Brewery } from './entities/brewery.entity';
+import axios from 'axios';
 const breweryType = ["micro", "macro", "taproom", "brewpub", "large"];
+const ministryAPI = "https://api.openbrewerydb.org/breweries";
 
 @Injectable()
 export class BreweriesService {
   constructor(
-    @InjectRepository(Brewery) private readonly breweryRepository: Repository<Brewery>
+    @InjectRepository(Brewery) 
+    private readonly breweryRepository: Repository<Brewery>
   ){}
-
+  
   async InsertBrewery(createBreweryDto: CreateBreweryDto[]) {
     const responseBrewery = [];
     for (let i = 0; i < createBreweryDto.length; i++) {
@@ -51,8 +54,50 @@ export class BreweriesService {
     return result
   }
 
-  async getBrewery(breweryName, breweryType, county){
+  async getBrewery(breweryName: string, breweryType, county: string){
     return this.breweryRepository.findOneBy({brewery_name: breweryName, brewery_type:breweryType, county_province: county});
   }
 
+  async getBreweryByProvience(Provience: string){
+    const getBrewery = await this.breweryRepository.createQueryBuilder()
+                              .select("id", "breweryId")
+                              .addSelect("brewery_name", "breweryName")
+                              .addSelect("street_address", "streetAddress")
+                              .addSelect("city", "city")
+                              .addSelect("county_province", "countyProvince")
+                              .addSelect("postal_code", "postalCode")
+                              .addSelect("country", "country")
+                              .addSelect("brewery_type", "breweryType")
+                              .where(`county_province = '${Provience}'`)
+                              .getRawMany();
+    return getBrewery;
+  }
+
+  async fetchMinistryBrewery(provience: string){
+    console.log(`API URL ${ministryAPI}?by_state=${provience}`);
+    const options = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 15000 
+    };
+    const response = await axios.get(`${ministryAPI}?by_state=east_sussex`, options);
+    return response?.data;
+  }
+
+  async checkMinistryMismatch(provience){
+    const associationBrewery = await this.getBreweryByProvience(provience);
+    const ministryBrewery = await this.fetchMinistryBrewery(provience);
+    const results = associationBrewery.filter(({ breweryName: n1,breweryType:b1,countyProvince:c1 }) => 
+    !ministryBrewery.some(({  name: n2,brewery_type:b2,county_province:c2 }) => (n1 == n2) && (b1 == b2) && (c1==c2)));
+    return results;
+  }
+
+  async checkAssociationMistmatch(provience){
+    const associationBrewery = await this.getBreweryByProvience(provience);
+    const ministryBrewery = await this.fetchMinistryBrewery(provience);
+    const results = ministryBrewery.filter(({ name: n1,brewery_type:b1,county_province:c1 }) => 
+    !associationBrewery.some(({  breweryName: n2,breweryType:b2,countyProvince:c2 }) => (n1 == n2) && (b1 == b2) && (c1==c2)));
+    return results;
+  }
 }

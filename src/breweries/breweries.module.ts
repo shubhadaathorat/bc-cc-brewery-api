@@ -3,10 +3,10 @@ import { BreweriesService } from './breweries.service';
 import { BreweriesController } from './breweries.controller';
 import { Brewery } from './entities/brewery.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { BreweryTypeService } from 'src/brewery-type/brewery-type.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Brewery])],
+  imports: [TypeOrmModule.forFeature([Brewery]), HttpModule],
   controllers: [BreweriesController],
   providers: [BreweriesService]
 })
