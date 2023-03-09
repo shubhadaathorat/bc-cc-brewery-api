@@ -83,14 +83,13 @@ export class BreweriesService {
   }
 
   async fetchMinistryBrewery(provience: string){
-    console.log(`API URL ${ministryAPI}?by_state=${provience}`);
     const options = {
       headers: {
         'Content-Type': 'application/json'
       },
       timeout: 15000 
     };
-    const response = await axios.get(`${ministryAPI}?by_state=east_sussex`, options);
+    const response = await axios.get(`${ministryAPI}?by_state=${provience}`, options);
     return response?.data;
   }
 

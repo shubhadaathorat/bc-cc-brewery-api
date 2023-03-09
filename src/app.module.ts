@@ -21,11 +21,6 @@ import { BreweriesModule } from './breweries/breweries.module';
       imports: [ConfigModule], // we import the ConfigModule
       inject: [ConfigService], // and then from the ConfigModule, we inject the ConfigService
       useFactory: async (configService: ConfigService) => {
-        console.log(`test`);
-        console.log(configService.get('POSTGRES_PASSWORD').toString());
-        console.log(configService.get('POSTGRES_HOST'));
-        console.log(configService.get('POSTGRES_USERNAME'));
-        console.log(configService.get('POSTGRES_DATABASE'));
         const isProd = configService.get('STAGE') === 'prod';
 
         return {
@@ -48,7 +43,6 @@ import { BreweriesModule } from './breweries/breweries.module';
     AssociationModule,
     CountriesModule,
     ProvincesModule,
-    BreweryTypeModule,
     BreweriesModule,
   ],
   controllers: [],
