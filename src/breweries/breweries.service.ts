@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateBreweryDto } from './dto/create-brewery.dto';
 import { Brewery } from './entities/brewery.entity';
 import axios from 'axios';
-const breweryType = ["micro", "macro", "taproom", "brewpub", "large"];
+const breweryType = ['micro','macro','nano','taproom','brewpub','large','regional','planning','bar','contract','proprietor','closed'];
 const ministryAPI = "https://api.openbrewerydb.org/breweries";
 
 @Injectable()
@@ -33,7 +33,7 @@ export class BreweriesService {
         brewerDatamapping["reason"] = 'Brewery Type is wrong';
         breweryData = brewerDatamapping
       }
-      const getBreweryData = await this.getBrewery(singleBrewery.name, singleBrewery.type, singleBrewery.county_province);
+      const getBreweryData = await this.getBrewery(singleBrewery.name, singleBrewery.type, singleBrewery.county_province, singleBrewery.postal_code);
       if(getBreweryData){
         brewerDatamapping["result"] = 'Rejected';
         brewerDatamapping["reason"] = 'Duplicate entry';
@@ -65,8 +65,8 @@ export class BreweriesService {
     return result
   }
 
-  async getBrewery(breweryName: string, breweryType, county: string){
-    return this.breweryRepository.findOneBy({brewery_name: breweryName, brewery_type:breweryType, county_province: county});
+  async getBrewery(breweryName: string, breweryType, county: string, postalCode: string){
+    return this.breweryRepository.findOneBy({brewery_name: breweryName, brewery_type:breweryType, county_province: county, postal_code: postalCode});
   }
 
   async getBreweryByProvience(Provience: string){
@@ -98,16 +98,58 @@ export class BreweriesService {
   async checkMinistryMismatch(provience){
     const associationBrewery = await this.getBreweryByProvience(provience);
     const ministryBrewery = await this.fetchMinistryBrewery(provience);
-    const results = associationBrewery.filter(({ breweryName: n1,breweryType:b1,countyProvince:c1 }) => 
-    !ministryBrewery.some(({  name: n2,brewery_type:b2,county_province:c2 }) => (n1 == n2) && (b1 == b2) && (c1==c2)));
+    const results = associationBrewery.filter((
+      { breweryName: aname,
+        breweryType:atype,
+        countyProvince:acounty, 
+        streetAddress: astreet, 
+        city: acity,
+        postalCode: pcode,
+        country: acountry
+      }) => !ministryBrewery.some(({  
+        name: mname,
+        brewery_type:mtype,
+        county_province:mcounty,
+        street: mstreet,
+        city: mcity,
+        postal_code: mcode,
+        country: mcountry
+      }) => (aname == mname)
+       && (atype == mtype) 
+       && (acounty == mcounty) 
+       && (astreet == mstreet) 
+       && (acity == mcity) 
+       && (pcode == mcode) 
+       && (acountry == mcountry)));
     return results;
   }
 
   async checkAssociationMistmatch(provience){
     const associationBrewery = await this.getBreweryByProvience(provience);
     const ministryBrewery = await this.fetchMinistryBrewery(provience);
-    const results = ministryBrewery.filter(({ name: n1,brewery_type:b1,county_province:c1 }) => 
-    !associationBrewery.some(({  breweryName: n2,breweryType:b2,countyProvince:c2 }) => (n1 == n2) && (b1 == b2) && (c1==c2)));
+    const results = ministryBrewery.filter((
+      { name: mname,
+        brewery_type:mtype,
+        county_province:mcounty,
+        street: mstreet,
+        city: mcity,
+        postal_code: mcode,
+        country: mcountry
+      }) => !associationBrewery.some(({ 
+        breweryName: aname, 
+        breweryType:atype,
+        countyProvince:acounty, 
+        streetAddress: astreet, 
+        city: acity,
+        postalCode: pcode,
+        country: acountry
+      }) => (aname == mname)
+       && (atype == mtype) 
+       && (acounty == mcounty) 
+       && (astreet == mstreet) 
+       && (acity == mcity) 
+       && (pcode == mcode) 
+       && (acountry == mcountry)));
     return results;
   }
 }

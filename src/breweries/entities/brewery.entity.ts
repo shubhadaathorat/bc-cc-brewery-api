@@ -4,13 +4,20 @@ import { Column, Entity,  PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique }
 export enum BreweryType {
     micro = 'micro',
     macro = 'macro',
+    nano = 'nano',
     taproom = 'taproom',
     brewpub = 'brewpub',
-    large = 'large'
+    large = 'large',
+    regional = 'regional',
+    planning = 'planning',
+    bar = 'bar',
+    contract = 'contract',
+    proprietor = 'proprietor',
+    closed = 'closed'
 }
 
 @Entity()
-@Unique(['brewery_name', 'brewery_type', 'county_province'])
+@Unique(['brewery_name', 'brewery_type', 'county_province', 'postal_code'])
 export class Brewery {
     @PrimaryGeneratedColumn()
     id: number;

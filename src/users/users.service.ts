@@ -69,7 +69,14 @@ export class UsersService {
             {"name":"macro"}, 
             {"name":"taproom"},
             {"name":"brewpub"},
-            {"name":"large"}
+            {"name":"large"},
+            {"name": "nano"}, 
+            {"name":"regional"}, 
+            {"name":"planning"},
+            {"name":"bar"},
+            {"name":"contract"},
+            {"name":"proprietor"},
+            {"name":"closed"}
         ]
           
         }
