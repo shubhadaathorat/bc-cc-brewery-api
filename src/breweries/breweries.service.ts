@@ -26,7 +26,7 @@ export class BreweriesService {
         breweryData = singleBrewery
       } else{
         const InsertBrewery = await this.createBrewery(singleBrewery);
-        InsertBrewery["Success"] = 'Selected';
+        InsertBrewery["result"] = 'Selected';
         breweryData = InsertBrewery
       }
       responseBrewery.push(breweryData);
