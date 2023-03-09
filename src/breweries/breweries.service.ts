@@ -18,15 +18,24 @@ export class BreweriesService {
     const responseBrewery = [];
     for (let i = 0; i < createBreweryDto.length; i++) {
       const singleBrewery = createBreweryDto[i];
+      const brewerDatamapping = {
+        brewery_name: singleBrewery.name,
+        street_address: singleBrewery.street,
+        city: singleBrewery.city,
+        county_province: singleBrewery.county_province,
+        postal_code: singleBrewery.postal_code,
+        country: singleBrewery.country,
+        brewery_type: singleBrewery.type
+      };
       let breweryData;
-      if(!breweryType.includes(singleBrewery.type)){
-        singleBrewery["result"] = 'Rejected';
-        breweryData = singleBrewery
+      if(!breweryType.includes(brewerDatamapping.brewery_type)){
+        brewerDatamapping["result"] = 'Rejected';
+        breweryData = brewerDatamapping
       }
       const getBreweryData = await this.getBrewery(singleBrewery.name, singleBrewery.type, singleBrewery.county_province);
       if(getBreweryData){
-        singleBrewery["result"] = 'Rejected';
-        breweryData = singleBrewery
+        brewerDatamapping["result"] = 'Rejected';
+        breweryData = brewerDatamapping;
       } else{
         const InsertBrewery = await this.createBrewery(singleBrewery);
         InsertBrewery["result"] = 'Selected';

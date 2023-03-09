@@ -9,7 +9,7 @@ export enum Role {
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({type: 'int2'})
     id: number;
 
     @Column({
@@ -62,13 +62,13 @@ export class User {
     @JoinColumn()
     association: Association 
     
-    @Column()
+    @Column({type: 'int2'})
     created_by: number
     
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date
 
-    @Column()
+    @Column({type: 'int2'})
     updated_by: number
     
     @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
