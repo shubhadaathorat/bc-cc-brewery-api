@@ -1,6 +1,13 @@
 import { Association } from 'src/association/entities/association.entity';
-import { BreweryType } from 'src/brewery-type/entities/brewery-type.entity';
-import { Column, Entity,  PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn, Unique } from 'typeorm';
+import { Column, Entity,  PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique } from 'typeorm';
+
+export enum BreweryType {
+    micro = 'micro',
+    macro = 'macro',
+    taproom = 'taproom',
+    brewpub = 'brewpub',
+    large = 'large'
+}
 
 @Entity()
 @Unique(['brewery_name', 'brewery_type', 'county_province'])
@@ -15,10 +22,12 @@ export class Brewery {
 	brewery_name: string;
 
     @Column({
-        type: "varchar",
-        length: 50
+        type: 'enum',
+        enum: BreweryType,
+        nullable: false,
+        default: BreweryType.micro
     })
-	brewery_type: BreweryType;
+    brewery_type: BreweryType;
 
     @Column({
         type: "varchar",

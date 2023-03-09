@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { BreweryTypeService } from 'src/brewery-type/brewery-type.service';
 import { Repository } from 'typeorm';
 import { CreateBreweryDto } from './dto/create-brewery.dto';
 import { Brewery } from './entities/brewery.entity';
+const breweryType = ["micro", "macro", "taproom", "brewpub", "large"];
 
 @Injectable()
 export class BreweriesService {
@@ -11,49 +11,48 @@ export class BreweriesService {
     @InjectRepository(Brewery) private readonly breweryRepository: Repository<Brewery>
   ){}
 
-  // @Inject(BreweryTypeService)
-  // private readonly BreweryTypeService: BreweryTypeService;
-
   async InsertBrewery(createBreweryDto: CreateBreweryDto[]) {
     const responseBrewery = [];
     for (let i = 0; i < createBreweryDto.length; i++) {
-      const singleBrewery = createBreweryDto[i]
-      const breweryData = await this.createBrewery(singleBrewery);
+      const singleBrewery = createBreweryDto[i];
+      let breweryData;
+      if(!breweryType.includes(singleBrewery.type)){
+        singleBrewery["result"] = 'Rejected';
+        breweryData = singleBrewery
+      }
+      const getBreweryData = await this.getBrewery(singleBrewery.name, singleBrewery.type, singleBrewery.county_province);
+      if(getBreweryData){
+        singleBrewery["result"] = 'Rejected';
+        breweryData = singleBrewery
+      } else{
+        const InsertBrewery = await this.createBrewery(singleBrewery);
+        InsertBrewery["Success"] = 'Selected';
+        breweryData = InsertBrewery
+      }
       responseBrewery.push(breweryData);
     }
-    console.log(`responseBrewery ${JSON.stringify(responseBrewery)}`);
     return responseBrewery;
   }
 
   async createBrewery(createBreweryDto) {
-    try{
-        // const breweryTypeId = await this.BreweryTypeService.findByBreweryType(createBreweryDto.breweryType);
-        const breweryData = {
-          brewery_name: createBreweryDto.name,
-          // brewery_type: breweryTypeId,
-          street_address: createBreweryDto.street,
-          city: createBreweryDto.city,
-          county_province: createBreweryDto.county_province,
-          postal_code: createBreweryDto.postal_code,
-          country: createBreweryDto.country,
-          brewery_type: createBreweryDto.type,
-          is_active: true,
-          created_by: 1,
-          updated_by: 1
-        }
-        const result = await this.breweryRepository.save(breweryData);
-        return result
-    } catch(e){
-        throw e;
+    const breweryData = {
+      brewery_name: createBreweryDto.name,
+      street_address: createBreweryDto.street,
+      city: createBreweryDto.city,
+      county_province: createBreweryDto.county_province,
+      postal_code: createBreweryDto.postal_code,
+      country: createBreweryDto.country,
+      brewery_type: createBreweryDto.type,
+      is_active: true,
+      created_by: 1,
+      updated_by: 1
     }
+    const result = await this.breweryRepository.save(breweryData);
+    return result
   }
 
-  // findAll() {
-  //   return `This action returns all breweries`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} brewery`;
-  // }
+  async getBrewery(breweryName, breweryType, county){
+    return this.breweryRepository.findOneBy({brewery_name: breweryName, brewery_type:breweryType, county_province: county});
+  }
 
 }

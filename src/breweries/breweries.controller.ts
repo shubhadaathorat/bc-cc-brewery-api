@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller,  Post, Body } from '@nestjs/common';
 import { BreweriesService } from './breweries.service';
-import { CreateBreweryDto, BreweryDto } from './dto/create-brewery.dto';
-import { Brewery } from './entities/brewery.entity';
+import { CreateBreweryDto } from './dto/create-brewery.dto';
 
 @Controller('breweries')
 export class BreweriesController {
