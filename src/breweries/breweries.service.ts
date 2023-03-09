@@ -30,11 +30,13 @@ export class BreweriesService {
       let breweryData;
       if(!breweryType.includes(brewerDatamapping.brewery_type)){
         brewerDatamapping["result"] = 'Rejected';
+        brewerDatamapping["reason"] = 'Brewery Type is wrong';
         breweryData = brewerDatamapping
       }
       const getBreweryData = await this.getBrewery(singleBrewery.name, singleBrewery.type, singleBrewery.county_province);
       if(getBreweryData){
         brewerDatamapping["result"] = 'Rejected';
+        brewerDatamapping["reason"] = 'Duplicate entry';
         breweryData = brewerDatamapping;
       } else{
         const InsertBrewery = await this.createBrewery(singleBrewery);

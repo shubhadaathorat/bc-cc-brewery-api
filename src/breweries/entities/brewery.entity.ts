@@ -59,7 +59,7 @@ export class Brewery {
     })
 	country: string;
 
-    @OneToOne(() => Association)
+    @OneToOne(type => Association, association => association.id)
     @JoinColumn()
     association: Association
 
