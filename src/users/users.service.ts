@@ -7,6 +7,7 @@ import { loginDto } from './dto/login-user.dto';
 import { Association } from 'src/association/entities/association.entity';
 import { Province } from 'src/provinces/entities/province.entity';
 import { Country } from 'src/countries/entities/country.entity';
+import md5 from "md5"; 
 
 @Injectable()
 export class UsersService {
@@ -44,7 +45,7 @@ export class UsersService {
 
   async login(loginDto: loginDto){
     const userLogin = await this.findByUsername(loginDto.username);
-    if (!userLogin || userLogin.user_password !== loginDto.password) {
+    if (!userLogin || userLogin.user_password !== md5(loginDto.password)) {
       throw new UnauthorizedException();
     }
     const userInformation = await this.fetchUserDetails(loginDto.username);
@@ -60,8 +61,17 @@ export class UsersService {
           association: {
             id: userInformation.raw[0].associationId,
             name: userInformation.raw[0].associationName,
+            provienc: userInformation.raw[0].proviencName,
             country: userInformation.raw[0].countryName
-          }
+          },
+          breweryTypes: [
+            {"name": "micro"}, 
+            {"name":"macro"}, 
+            {"name":"taproom"},
+            {"name":"brewpub"},
+            {"name":"large"}
+        ]
+          
         }
       } 
     };
